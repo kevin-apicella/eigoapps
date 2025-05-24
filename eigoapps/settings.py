@@ -6,9 +6,10 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-local_env_file = BASE_DIR / '.env.local'
+local_env_file = BASE_DIR / '.env'
 if local_env_file.exists():
     load_dotenv(local_env_file)
+
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 

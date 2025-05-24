@@ -14,7 +14,7 @@
     <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>
         <div class="image-container" draggable="false">
             {% load static %}
-            <img onclick="playAudio()" draggable="false" src="{% static '/static/images/elephant.png' %}">
+            <img onclick="playAudio()" draggable="false" src="{% static '/images/elephant.png' %}">
         </div>
     <div id="answerContainer" class="list-group answer-container" ondragend="generateAnswerText()">
     </div>
@@ -65,17 +65,12 @@
             .then(response => response.json())
             .then(data => {
                 if (data.is_correct === true) {
+                    window.alert("Great Job! You did it!");
                     document.querySelector(".next-arrow").style.display = "block";
                 } else {
                     window.alert("Not quite right, try again!");
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.alert('Error checking answer: ' + error.message);
             });
-        } else {
-            console.log(`Answer length ${combinedText.length} doesn't match expected ${expectedLength}`);
         }
     };
 

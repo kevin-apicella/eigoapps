@@ -42,7 +42,7 @@ def load_app_syllableconnect(request):
         "progress_percentage": progress_percentage
         }
 
-    return render(request, 'syllableconnect2.html', context)
+    return render(request, 'syllableconnect.html', context)
 
 
 @csrf_exempt
