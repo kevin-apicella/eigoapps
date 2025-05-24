@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Menu{% endblock %}
+{% block content %}
+<style>
+  .progress-bar {
+    width: {{ progress_percentage }}%;
+    height: 100%;
+    background-color: #066DFE;
+}
+</style>
+<div class="main-container">
+    <div class="progress-text">単語 {{ index }} / {{ total }}</div>
+    <div>debug code: progress_percentage is {{ progress_percentage }}</div>
+    <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>
+        <div class="image-container" draggable="false">
+            {% load static %}
+            <img onclick="playAudio()" draggable="false" src="{% static '/static/images/elephant.png' %}">
+        </div>
+    <div id="answerContainer" class="list-group answer-container" ondragend="generateAnswerText()">
+    </div>
+        <div class="text-container" >音節：</div>
+    <div id="wordContainer" class="list-group">
+        {% for parts in syllables  %}
+          <div class="list-group-item">{{ parts }}</div>
+        {% endfor %}
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script>
+    Sortable.create(answerContainer, {
+      group: "sorting",
+      sort: true
+    });
+
+    Sortable.create(wordContainer, {
+      group: "sorting",
+      sort: true
+    });
+
+    function playAudio() {
+      var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+      audio.play();
+    };
+
+    function generateAnswerText() {
+        const elements = document.querySelector(".answer-container").children;
+        let combinedText = '';
+        for (let i = 0; i < elements.length; i++) {
+            combinedText += elements[i].innerText;
+        }
+
+        const expectedLength = {{ answer_length }};
+
+        if (combinedText.length === expectedLength) {
+            fetch("/syllableconnect/check-answer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ answer: combinedText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.is_correct === true) {
+                    document.querySelector(".next-arrow").style.display = "block";
+                } else {
+                    window.alert("Not quite right, try again!");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.alert('Error checking answer: ' + error.message);
+            });
+        } else {
+            console.log(`Answer length ${combinedText.length} doesn't match expected ${expectedLength}`);
+        }
+    };
+
+    function refreshPage() {
+      window.location.reload();
+    }
+</script>
+{% endblock %}
