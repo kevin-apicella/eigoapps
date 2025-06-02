@@ -10,11 +10,19 @@
 </style>
 <div class="main-container">
     <div class="progress-text">単語 {{ index }} / {{ total }}</div>
-    <div>debug code: progress_percentage is {{ progress_percentage }}</div>
     <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>
-        <div class="image-container" draggable="false">
-            {% load static %}
-            <img onclick="playAudio()" draggable="false" src="{% static '/images/elephant.png' %}">
+        <div class="image-container" onclick="playAudio()" draggable="false">
+            <div class="card">
+                <div class="front">
+                    {% load static %}
+                    <img draggable="false" src="{% static '/images/elephant.png' %}">
+                </div>
+                <div class="back">
+                    <h1>{{ jp_word }}</h1>
+                </div>
+
+            </div>
+
         </div>
     <div id="answerContainer" class="list-group answer-container" ondragend="generateAnswerText()">
     </div>
@@ -40,10 +48,13 @@
       sort: true
     });
 
+    const audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+
     function playAudio() {
-      var audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+      audio.pause();
+      audio.currentTime = 0;
       audio.play();
-    };
+    }
 
     function generateAnswerText() {
         const elements = document.querySelector(".answer-container").children;
@@ -77,5 +88,7 @@
     function refreshPage() {
       window.location.reload();
     }
+
+
 </script>
 {% endblock %}

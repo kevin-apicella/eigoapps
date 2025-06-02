@@ -50,10 +50,43 @@
 
 .image-container {
   margin: 1% 0% 1% 0%;
-  border: 4mm ridge #f9fafc;
-  border-radius: 20px;
-  max-height: 50%;
-  background-color: #dedfe6;
+  border-radius: 2rem;
+  height: 50%;
+  width: 40%;
+  perspective: 800px;
+}
+
+.image-container:hover > .card {
+  cursor: pointer;
+  transform: rotateY(180deg);
+}
+.card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  transition: transform 1500ms;
+  transform-style: preserve-3d;
+  background-color: lightgrey;
+  border-radius: 2rem;
+}
+
+.front,
+.back {
+  height: 100%;
+  width: 100%;
+  border-radius: 2rem;
+  box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25);
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
 }
 
 .answer-container {

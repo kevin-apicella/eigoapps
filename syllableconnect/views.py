@@ -15,8 +15,11 @@ def load_app_syllableconnect(request):
     if not words:
         words = [x.word for x in WordBank.objects.filter(connect_app=True)]
         random.shuffle(words)
+        jp_words = [WordBank.objects.get(word=entries).jp_word for entries in words]
         request.session['word_bank'] = words
-
+        request.session['jp_words'] = jp_words
+    else:
+        jp_words = request.session.get('jp_words', [])
     # establish index
     index = request.session.get("index", 0)
     request.session["index"] = index
@@ -39,7 +42,8 @@ def load_app_syllableconnect(request):
         "total": len(words),
         "answer_length": len(words[index]),
         "syllables": syllables,
-        "progress_percentage": progress_percentage
+        "progress_percentage": progress_percentage,
+        "jp_word": jp_words[index]
         }
 
     return render(request, 'syllableconnect.html', context)
