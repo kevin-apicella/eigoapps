@@ -15,6 +15,7 @@ from django.contrib.postgres.fields import ArrayField
 #     syllables = ArrayField(models.CharField(max_length=19, blank=False))
 #
 
+
 class WordBank(models.Model):
     word = models.CharField(max_length=50, unique=True)
     jp_word = models.CharField(max_length=20, null=True)
@@ -23,9 +24,12 @@ class WordBank(models.Model):
     connect_app = models.BooleanField(null=False, default=False)
 
     def __str__(self):
-        if self.jp_word:
-            return f"{self.word} ({self.jp_word}) - Level {self.level}"
-        return f"{self.word} - Level {self.level}"
+        try:
+            if self.jp_word:
+                return f"{self.word} ({self.jp_word}) - Level {self.level}"
+            return f"{self.word} - Level {self.level}"
+        except:
+            return f"WordBank #{self.pk}"
 
     class Meta:
         verbose_name = "Word"
@@ -37,8 +41,14 @@ class SyllableBank(models.Model):
     syllables = ArrayField(models.CharField(max_length=19, blank=False))
 
     def __str__(self):
-        syllables_str = "-".join(self.syllables) if self.syllables else "No syllables"
-        return f"{self.word.word}: {syllables_str}"
+        try:
+            word_display = str(self.word) if self.word else "Unknown word"
+            if self.syllables and len(self.syllables) > 0:
+                syllables_str = "-".join(str(s) for s in self.syllables if s)
+                return f"{word_display}: {syllables_str}"
+            return f"{word_display}: No syllables"
+        except:
+            return f"SyllableBank #{self.pk}"
 
     class Meta:
         verbose_name = "Syllable Breakdown"
