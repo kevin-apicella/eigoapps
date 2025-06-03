@@ -1,16 +1,19 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
 from syllableconnect.models import *
 import random
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
+from elevenlabs import play
 
 
 def load_app_syllableconnect(request):
     # establish word bank
+
     words = request.session.get("word_bank", None)
     if not words:
         words = [x.word for x in WordBank.objects.filter(connect_app=True)]

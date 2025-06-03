@@ -58,8 +58,9 @@
 
 .image-container:hover > .card {
   cursor: pointer;
-  transform: rotateY(180deg);
+  box-shadow: 0px 0px 10px 5px #fc894d;
 }
+
 .card {
   height: 100%;
   width: 100%;

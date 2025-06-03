@@ -11,14 +11,15 @@
 <div class="main-container">
     <div class="progress-text">単語 {{ index }} / {{ total }}</div>
     <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>
-        <div class="image-container" onclick="playAudio()" draggable="false">
+        <div class="image-container" draggable="false">
             <div class="card">
-                <div class="front">
+                <div class="front" onclick="flipCard()">
                     {% load static %}
                     <img draggable="false" src="{% static '/images/elephant.png' %}">
                 </div>
-                <div class="back">
+                <div class="back" onclick="flipCard()">
                     <h1>{{ jp_word }}</h1>
+                    <button onclick="playAudio(event)">I AM DA SOUND BUTTONLOL</button>
                 </div>
 
             </div>
@@ -50,7 +51,8 @@
 
     const audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
 
-    function playAudio() {
+    function playAudio(event) {
+      event.stopPropagation();
       audio.pause();
       audio.currentTime = 0;
       audio.play();
@@ -82,6 +84,16 @@
                     window.alert("Not quite right, try again!");
                 }
             });
+        }
+    };
+
+    function flipCard(event) {
+        const card = document.querySelector('.card');
+
+        if (card.style.transform === 'rotateY(180deg)') {
+            card.style.transform = 'rotateY(0deg)';
+        } else {
+            card.style.transform = 'rotateY(180deg)';
         }
     };
 
