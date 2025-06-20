@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="front" onclick="flipCard()">
                     {% load static %}
-                    <img draggable="false" src="{% static '/images/elephant.png' %}">
+                    <img draggable="false" src="{% static current_image %}">
                 </div>
                 <div class="back" onclick="flipCard()">
                     <h1>{{ jp_word }}</h1>
@@ -31,9 +31,12 @@
     </div>
         <div class="text-container" >音節：</div>
     <div id="wordContainer" class="list-group">
-        {% for parts in syllables  %}
-          <div class="list-group-item">{{ parts }}</div>
-        {% endfor %}
+<!--        {% for parts in syllables  %}-->
+<!--          <div class="list-group-item">{{ parts }}</div>-->
+<!--        {% endfor %}-->
+            {% for text,data in syllable_data %}
+                <div class="list-group-item" data-audio-path="{{ data }}" onmousedown="syllableAudio(this)">{{ text }}</div>
+            {% endfor %}
     </div>
     <div class="progress-container">
         <div class="progress-bar"></div>
@@ -51,9 +54,10 @@
       sort: true
     });
 
-    const audio = new Audio('https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3');
+    const audio = new Audio('{{ word_audio_path }}');
 
     function playAudio(event) {
+
       event.stopPropagation();
       audio.pause();
       audio.currentTime = 0;
@@ -98,6 +102,12 @@
             card.style.transform = 'rotateY(180deg)';
         }
     };
+
+    function syllableAudio(element) {
+        const audioPath = element.getAttribute('data-audio-path');
+        const audio = new Audio(audioPath);
+        audio.play();
+    }
 
     function refreshPage() {
       window.location.reload();
