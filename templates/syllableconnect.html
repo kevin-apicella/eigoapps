@@ -17,7 +17,11 @@
             <div class="card">
                 <div class="front" onclick="flipCard()">
                     {% load static %}
-                    <img draggable="false" src="{% static current_image %}">
+                        {% if image_exists %}
+                            <img draggable="false" src="{% static current_image %}">
+                        {% else %}
+                            <img draggable="false" src="{% static '/images/hatena.jpg' %}">
+                        {% endif %}
                 </div>
                 <div class="back" onclick="flipCard()">
                     <h1>{{ jp_word }}</h1>

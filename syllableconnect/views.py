@@ -3,6 +3,7 @@ from django.urls import reverse
 from syllableconnect.models import *
 import random
 import json
+import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -47,7 +48,8 @@ def load_app_syllableconnect(request):
     request.session['progress_percentage'] = progress_percentage
 
     current_image = "/images/" + images[index]
-
+    print(current_image)
+    print(os.path.isfile("static/" + current_image))
     context = {
         "index": index+1,
         "total": len(words),
@@ -55,6 +57,7 @@ def load_app_syllableconnect(request):
         "syllables": syllables,
         "progress_percentage": progress_percentage,
         "jp_word": jp_words[index],
+        "image_exists": os.path.isfile("static/" + current_image),
         "current_image": current_image,
         "syllable_audio_paths": syllable_audio_paths,
         "syllable_data": zip(syllables, syllable_audio_paths),
