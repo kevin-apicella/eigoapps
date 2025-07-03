@@ -50,12 +50,24 @@
 <script>
     Sortable.create(answerContainer, {
       group: "sorting",
-      sort: true
+      sort: true,
+      onStart: function() {
+        document.body.classList.add('dragging-active');
+      },
+      onEnd: function() {
+        document.body.classList.remove('dragging-active');
+      }
     });
 
     Sortable.create(wordContainer, {
       group: "sorting",
-      sort: true
+      sort: true,
+      onStart: function() {
+        document.body.classList.add('dragging-active');
+      },
+      onEnd: function() {
+        document.body.classList.remove('dragging-active');
+      }
     });
 
     const audio = new Audio('{{ word_audio_path }}');
