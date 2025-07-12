@@ -67,6 +67,25 @@ def load_app_syllableconnect(request):
     return render(request, 'syllableconnect.html', context)
 
 
+def load_previous_question(request):
+    current_index = request.session.get("index", 0)
+
+    if current_index > 0:
+        request.session["index"] = current_index - 1
+
+    return redirect('/syllableconnect/')
+
+
+def load_next_question(request):
+    current_index = request.session.get("index", 0)
+    question_total = request.session.get("total", 20)
+    if current_index < question_total:
+        request.session["index"] = current_index + 1
+
+    return redirect('/syllableconnect/')
+
+
+
 @csrf_exempt
 def check_answer(request):
     data = json.loads(request.body)
@@ -74,7 +93,6 @@ def check_answer(request):
     correct_answer = request.session['answer']
     if user_answer == correct_answer:
         is_correct = True
-        request.session["index"] = request.session.get("index") + 1
     else:
         is_correct = False
     print(f"is_correct is set to {is_correct}")
@@ -91,3 +109,4 @@ def reshuffle(arr, answer):
     if order_check == answer:
         print("DING DING DING RESHUFFLE DING DING DING")
         reshuffle(arr, answer)
+

@@ -11,8 +11,21 @@
 }
 </style>
 <div class="main-container">
+        <div id="myModal" class="modal">
+
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
+          </div>
+        </div>
+
     <div class="progress-text">単語 {{ index }} / {{ total }}</div>
-    <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>
+<a href="/syllableconnect/previous" class="prev-arrow">
+        <i class="fas fa-chevron-left"></i></a>
+    <a href="/syllableconnect/next" class="next-arrow">
+        <i class="fas fa-chevron-right"></i></a>
+
+<!--    <button class="next-arrow" onclick="refreshPage()"><i class="fas fa-chevron-right"></i></button>-->
         <div class="image-container" draggable="false">
             <div class="card">
                 <div class="front" onclick="flipCard()">
@@ -99,9 +112,21 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.is_correct === true) {
-                    window.alert("Great Job! You did it!");
-                    document.querySelector(".next-arrow").style.display = "block";
+                 if (data.is_correct === true) {
+                   const items = document.querySelectorAll('.answer-container .list-group-item');
+                   const delay = 100;
+                   items.forEach((item, index) => {
+                   setTimeout(() => {
+                     item.classList.add('bounce-animation');
+                     setTimeout(() => {
+                        item.classList.remove('bounce-animation');
+                     }, 600);
+                   }, index * delay);
+
+                   audio.pause();
+                   audio.currentTime = 0;
+                   audio.play();
+                 });
                 } else {
                     window.alert("Not quite right, try again!");
                 }
@@ -129,6 +154,40 @@
       window.location.reload();
     }
 
+    var modal = document.getElementById("myModal");
 
+    var btn = document.getElementById("myBtn");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    function startWaveAnimation() {
+    const items = document.querySelectorAll('.answerContainer .list-group-item');
+    const delay = 100; // milliseconds between each item animation
+
+    items.forEach((item, index) => {
+        // Remove any existing animation class
+        item.classList.remove('bounce-animation');
+
+        // Add animation class with delay
+        setTimeout(() => {
+            item.classList.add('bounce-animation');
+
+            // Remove the class after animation completes
+            setTimeout(() => {
+                item.classList.remove('bounce-animation');
+            }, 600); // matches animation duration
+        }, index * delay);
+    });
+}
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
 </script>
 {% endblock %}
