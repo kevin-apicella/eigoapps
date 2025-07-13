@@ -85,6 +85,17 @@
 
     const audio = new Audio('{{ word_audio_path }}');
 
+    window.addEventListener('DOMContentLoaded', function() {
+    audio.load();
+
+    const syllableElements = document.querySelectorAll('[data-audio-path]');
+    syllableElements.forEach(element => {
+        const audioPath = element.getAttribute('data-audio-path');
+        const syllableAudio = new Audio(audioPath);
+        syllableAudio.load();
+    });
+});
+
     function playAudio(event) {
 
       event.stopPropagation();
